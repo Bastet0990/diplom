@@ -11,7 +11,7 @@ function AuthProvider({ children }) {
     // Создаем клиент Supabase с использованием URL и ключа API
     const supabase = createClient("https://bksbhcgtyzncdyyseffy.supabase.co", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrc2JoY2d0eXpuY2R5eXNlZmZ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg5NzE0MDMsImV4cCI6MjA1NDU0NzQwM30.iWirz-usL5zMVNl7rTuuNID22swMrwOLFdKkdYcOs2Q");
     // Состояние для отслеживания загрузки
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     // Состояние для хранения информации о пользователе
     const [user, setUser] = useState(null);
     // Состояние для хранения значения поля ввода имени пользователя

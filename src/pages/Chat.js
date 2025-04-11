@@ -1,13 +1,15 @@
-import { useState } from "react"; // Импорт хука useState из библиотеки React для управления состоянием компонентов
+import { useRef, useState } from "react"; // Импорт хука useState из библиотеки React для управления состоянием компонентов
 import { Card, Box, Typography, IconButton, Input, Stack, Link, Avatar, Button } from '@mui/joy'; // Импорт компонентов из библиотеки Material UI (MUI) Joy для создания пользовательского интерфейса
 import { Send, Logout } from "@mui/icons-material" // Импорт иконок Send и Logout из библиотеки Material UI (MUI) Icons
 import { useAuth } from "../contexts/AuthContext"; // Импорт хука useAuth из контекста AuthContext для работы с аутентификацией пользователя
 
 function Chat() {
+    const chatRef = useRef(null);
     // Объявление состояний компонента с использованием хука useState
     const [messages, setMessages] = useState([]); // Состояние для хранения списка сообщений в чате
     const [inputMessage, setInputMessage] = useState(''); // Состояние для хранения текста вводимого сообщения
     const [isThinking, setIsThinking] = useState(false); // Состояние для отслеживания процесса "размышления" (ожидания ответа от сервера)
+
 
     // Получение данных пользователя и функции выхода из системы из контекста аутентификации
     const { user, logout } = useAuth();
@@ -30,7 +32,7 @@ function Chat() {
         setInputMessage('');
         try {
             // Отправляем POST-запрос к API для получения ответа от модели
-            const res = await fetch('https://api.screwltd.com/v3/ai/generate', {
+            const res = await fetch('https://api.screwltd.com/v3/ai/generate/7d01a950-4419-458c-96e0-88d6c59fc78a', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Указываем, что отправляем данные в формате JSON
@@ -74,7 +76,14 @@ function Chat() {
     // Функция для добавления нового сообщения в список сообщений
     const addMessage = (text, duration, role) => {
         const newMessage = { text: text, duration: duration, role: role }; // Создаем объект нового сообщения
-        setMessages(prevMessages => [...prevMessages, newMessage]); // Добавляем новое сообщение в список, используя предыдущее состояние
+        setMessages(prevMessages => {
+            const updatedMessages = [...prevMessages, newMessage]; // Добавляем новое сообщение в список, используя предыдущее состояние
+            // Используем requestAnimationFrame для прокрутки после рендеринга DOM
+            requestAnimationFrame(() => {
+                chatRef.current?.scrollIntoView({ behavior: 'smooth' });
+            });
+            return updatedMessages;
+        });
     };
 
     // Функция для преобразования времени в миллисекундах в секунды с двумя знаками после запятой
@@ -109,7 +118,7 @@ function Chat() {
                                         {message.role === 'user' ? ( // Если сообщение от пользователя
                                             <Typography level="title-md">{user.username}</Typography> // Отображаем имя пользователя
                                         ) : ( // Если сообщение от модели
-                                            <Link target="_blank" href="https://chat.screwltd.com/" level="title-md">Capricorn AI</Link> // Отображаем ссылку на сайт Capricorn AI
+                                            <Link target="_blank" href="https://chat.screwltd.com/" level="title-md">Сильвестр Андреевич</Link> // Отображаем ссылку на сайт Capricorn AI
                                         )}
                                         <Typography level="body-sm">{message.text}</Typography> {/* Текст сообщения */}
                                         {message.duration != 0 && ( // Если есть информация о времени ответа
@@ -119,6 +128,7 @@ function Chat() {
                                 </Card>
                             </Stack>
                         ))}
+                        <div ref={chatRef}/>
                     </Stack>
                 </Box>
                 <Box> {/* Контейнер для поля ввода сообщения */}
