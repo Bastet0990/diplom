@@ -32,7 +32,7 @@ function Chat() {
         setInputMessage('');
         try {
             // Отправляем POST-запрос к API для получения ответа от модели
-            const res = await fetch('https://api.screwltd.com/v3/ai/generate/7d01a950-4419-458c-96e0-88d6c59fc78a', {
+            const res = await fetch('https://api.screwltd.com/v3/ai/generate/3a0a9283-207c-4265-95f1-21ac2e3f62f9', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json', // Указываем, что отправляем данные в формате JSON
@@ -118,7 +118,7 @@ function Chat() {
                                         {message.role === 'user' ? ( // Если сообщение от пользователя
                                             <Typography level="title-md">{user.username}</Typography> // Отображаем имя пользователя
                                         ) : ( // Если сообщение от модели
-                                            <Link target="_blank" href="https://chat.screwltd.com/" level="title-md">Сильвестр Андреевич</Link> // Отображаем ссылку на сайт Capricorn AI
+                                            <Link target="_blank" href="https://chat.screwltd.com/" level="title-md">Нейро-Помощник</Link> // Отображаем ссылку на сайт Capricorn AI
                                         )}
                                         <Typography level="body-sm">{message.text}</Typography> {/* Текст сообщения */}
                                         {message.duration != 0 && ( // Если есть информация о времени ответа
